@@ -1,6 +1,4 @@
-﻿
-
-namespace ChessLogic
+﻿namespace ChessLogic
 {
     public enum Player
     {
