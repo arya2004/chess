@@ -84,7 +84,7 @@ namespace ChessUI
         {
             selectedPos = null;
             HideHighlight();
-            if(moveCache.TryGetValue(pos, out Move move))
+            if (moveCache.TryGetValue(pos, out Move move))
             {
                 HandleMove(move);
             }
@@ -146,10 +146,11 @@ namespace ChessUI
 
         private void SetCursor(Player player)
         {
-            if(player == Player.White)
+            if (player == Player.White)
             {
                 Cursor = ChessCursor.WhiteCursor;
-            }else if(player == Player.Black)
+            }
+            else if (player == Player.Black)
             {
                 Cursor = ChessCursor.BlackCursor;
             }

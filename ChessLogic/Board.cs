@@ -59,5 +59,38 @@ namespace ChessLogic
         public static bool IsInside(Position position) => position.Row >= 0 && position.Row < 8 && position.Column >= 0 && position.Column < 8;
         public bool IsEmpty(Position position) => this[position] == null;
 
+        public IEnumerable<Position> PiecePosition()
+        {
+            for (int i = 0; i < 8; i++)
+            {
+                for (int j = 0; j < 8; j++)
+                {
+                    Position pos = new Position(i, j);
+                    if (!IsEmpty(pos))
+                    {
+                        yield return pos;
+                    }
+                }
+            }
+        }
+
+        public IEnumerable<Position> PiecePositionsFor(Player player) => PiecePosition().Where(pos => this[pos].Color == player);
+
+        public bool IsInCheck(Player player) => PiecePositionsFor(player.Opponent()).Any(pos =>
+        {
+            Piece p = this[pos];
+            return p.CanCaptureOpponentKing(pos, this);
+        });
+
+        public Board CopyBoard()
+        {
+            Board copy = new Board();
+            foreach (Position pos in PiecePosition())
+            {
+                copy[pos] = this[pos].Copy();
+            }
+            return copy;
+        }
+
     }
 }

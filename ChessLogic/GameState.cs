@@ -25,7 +25,8 @@ namespace ChessLogic
                 return Enumerable.Empty<Move>();
             }
             Piece piece = Board[pos];
-            return piece.GetMoves(pos, Board);
+            IEnumerable<Move> potentialMoves =  piece.GetMoves(pos, Board);
+            return potentialMoves.Where(move => move.IsLegal(Board));
         }
 
         public void MakeMove(Move move)
