@@ -51,6 +51,14 @@ namespace ChessLogic.Pieces
             {
                 yield return new NormalMove(from, to);
             }
+            if(CanCastleKingSide(from, board))
+            {
+                yield return new Castle(MoveType.CastleKingSide, from);
+            }
+            if(CanCastleQUeenSide(from, board))
+            {
+                yield return new Castle(MoveType.CastleQueenSide, from);
+            }
         }
 
         public override bool CanCaptureOpponentKing(Position from, Board board)
@@ -60,6 +68,45 @@ namespace ChessLogic.Pieces
                 Piece p = board[to];
                 return p != null && p.Type == PieceType.King;
             });
+        }
+
+        private static bool AllEmpty(IEnumerable<Position> positions, Board board)
+        {
+            return positions.All(pos => board.IsEmpty(pos));
+        }
+
+        private bool CanCastleKingSide(Position from, Board board)
+        {
+            if (HasMoved)
+            {
+                return false;
+            }
+            Position rookPos = new Position(from.Row, 7);
+            Position[] betweenPosition = [new(from.Row, 5), new(from.Row, 6)];
+
+            return IsUnmovedRook(rookPos, board) && AllEmpty(betweenPosition, board);
+        }
+        private bool CanCastleQUeenSide(Position from, Board board)
+        {
+            if (HasMoved)
+            {
+                return false;
+            }
+            Position rookPos = new Position(from.Row, 0);
+            Position[] betweenPosition = [new(from.Row, 1), new(from.Row, 2), new(from.Row, 3)];
+
+            return IsUnmovedRook(rookPos, board) && AllEmpty(betweenPosition, board);
+        }
+
+
+        private static bool IsUnmovedRook(Position pos, Board board)
+        {
+            if (board.IsEmpty(pos))
+            {
+                return false;
+            }
+            Piece piece = board[pos];
+            return piece.Type == PieceType.Rook && !piece.HasMoved;
         }
     }
 }
