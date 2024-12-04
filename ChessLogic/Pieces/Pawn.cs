@@ -40,8 +40,20 @@ namespace ChessLogic.Pieces
         {
             Position oneMoveePos = from + forward;
             if (CanMoveTo(oneMoveePos, board))
-            {
-                yield return new NormalMove(from, oneMoveePos);
+            {   
+                if(oneMoveePos.Row == 0 || oneMoveePos.Row == 7)
+                {
+                    foreach(Move m in PromotionMove(from, oneMoveePos))
+                    {
+                        yield return m;
+                    }
+                }
+                else
+                {
+                    yield return new NormalMove(from, oneMoveePos);
+                }
+
+                
                 Position twoMovesPos = oneMoveePos + forward;
 
                 if (!HasMoved && CanMoveTo(twoMovesPos, board))
@@ -57,7 +69,17 @@ namespace ChessLogic.Pieces
             {
                 Position to = from + forward + dir;
                 if(CanCaptureAt(to, board)){
-                    yield return new NormalMove(from, to);
+                    if (to.Row == 0 || to.Row == 7)
+                    {
+                        foreach (Move m in PromotionMove(from, to))
+                        {
+                            yield return m;
+                        }
+                    }
+                    else
+                    {
+                        yield return new NormalMove(from, to);
+                    }
                 }
             }
         }
@@ -74,6 +96,14 @@ namespace ChessLogic.Pieces
                 Piece piece = board[move.ToPosition];
                 return piece != null && piece.Type == PieceType.King;
             });
+        }
+
+        private static IEnumerable<Move> PromotionMove(Position from, Position to)
+        {
+            yield return new PawnPromotion(from, to, PieceType.Queen);
+            yield return new PawnPromotion(from, to, PieceType.Bishop);
+            yield return new PawnPromotion(from, to, PieceType.Knight);
+            yield return new PawnPromotion(from, to, PieceType.Rook);
         }
     }
 }
