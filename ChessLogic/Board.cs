@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -10,6 +11,10 @@ namespace ChessLogic
     public class Board
     {
         private readonly Piece[,] pieces = new Piece[8, 8];
+        private readonly Dictionary<Player, Position> pawnSkipPosition = new()
+        { 
+               {Player.White, null}, {Player.Black, null},
+        };
         public Piece this[int row, int col]
         {
             get => pieces[row, col];
@@ -21,6 +26,19 @@ namespace ChessLogic
             get => this[position.Row, position.Column];
             set => this[position.Row, position.Column] = value;
         }
+
+        public Position GetPawnSkipPosition(Player player)
+        {
+            return pawnSkipPosition[player];
+        }
+
+        public void SetPawnSkipPosition(Player player, Position pos)
+        {
+            pawnSkipPosition[player] = pos;
+        }
+
+
+
 
         public static Board Initial()
         {

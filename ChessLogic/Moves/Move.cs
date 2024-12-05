@@ -21,4 +21,5 @@ namespace ChessLogic.Moves
             return !copu.IsInCheck(player);
         }
     }
+
 }
