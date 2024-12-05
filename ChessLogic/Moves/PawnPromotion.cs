@@ -24,7 +24,7 @@ namespace ChessLogic.Moves
             NewType = newType;
         }
 
-        public override void Execute(Board board)
+        public override bool Execute(Board board)
         {
             Piece pawn = board[FromPosition];
             board[FromPosition] = null;
@@ -32,6 +32,8 @@ namespace ChessLogic.Moves
             Piece promotionPiece = CreatePromotionPiece(pawn.Color);
             promotionPiece.HasMoved = true;
             board[ToPosition] = promotionPiece;
+
+            return true;
         }
 
         private Piece CreatePromotionPiece(Player color)

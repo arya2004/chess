@@ -17,11 +17,13 @@
             skippedPos = new Position((from.Row + to.Row) / 2, from.Column);
         }
 
-        public override void Execute(Board board)
+        public override bool Execute(Board board)
         {
             Player player = board[FromPosition].Color;
             board.SetPawnSkipPosition(player, skippedPos);
             new NormalMove(FromPosition, ToPosition).Execute(board);
+
+            return true;
         }
 
     }
